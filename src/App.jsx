@@ -17,7 +17,7 @@ const MODULOS = [
     descripcion: "Pedidos de víveres para embarcaciones con control de dieta nutricional y cálculo USD/cabeza/día.",
     icono: "🚢",
     status: "activo",
-    url: "https://compras-app-beta.vercel.app",
+    url: "https://viveres-app.vercel.app",
     color: "#1A7A6E",
     tags: ["Embarcaciones", "Catering"],
   },
