@@ -372,7 +372,7 @@ export default function App() {
       <div className="hero">
         <div className="hero-content">
           <div className="hero-eyebrow">Sistema integrado de gestión</div>
-          <h1 className="hero-title">Plataforma <span>Terra Mare</span> Group</h1>
+          <h1 className="hero-title">Parana Logística · <span>Clean Sea</span> · Terra Mare Services</h1>
           <p className="hero-desc">Todos los módulos operativos del grupo en un solo lugar. Compras, víveres, proyectos, tripulaciones, seguridad y más.</p>
           <div className="hero-stats">
             <div className="hero-stat"><div className="hero-stat-n">{MODULOS.length}</div><div className="hero-stat-l">Módulos</div></div>
