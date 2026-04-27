@@ -61,7 +61,17 @@ const MODULOS = [
     color: "#374151",
     tags: ["Mantenimiento", "Flota"],
   },
-  {
+    {
+  id: "reparaciones",
+  nombre: "Solicitudes de Reparación",
+  descripcion: "Gestión de solicitudes de reparación por barco. Panel de control para el superintendente técnico con seguimiento por ítem.",
+  icono: "🔧",
+  status: "activo",
+  url: "https://reparaciones-app-mu.vercel.app",
+  color: "#374151",
+  tags: ["Embarcaciones", "Mantenimiento", "SSRR"],
+},
+{
     id: "hsqe",
     nombre: "HSQE",
     descripcion: "Control de certificaciones, vencimientos, inspecciones, incidentes y cumplimiento normativo.",
