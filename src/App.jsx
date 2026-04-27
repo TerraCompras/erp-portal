@@ -360,20 +360,20 @@ export default function App() {
           <div className="header-logo">⚓</div>
           <div className="header-title">
             <div className="header-main">ERP Grupo Marítimo</div>
-            <div className="header-sub">Terra Mare Group · Plataforma integrada</div>
+            <div className="header-sub">Sistema integrado de gestión</div>
           </div>
         </div>
         <div className="header-right">
-          <div className="header-empresa">PARANA LOGÍSTICA · CLEAN SEA · TERRA MARE</div>
+          <div className="header-empresa">PARANA LOGÍSTICA · CLEAN SEA · TERRA MARE SERVICES</div>
           <div className="header-user">TM</div>
         </div>
       </header>
 
       <div className="hero">
-        <div className="hero-content">
+        <div className="hero-content" style={{ textAlign: "center" }}>
           <div className="hero-eyebrow">Sistema integrado de gestión</div>
           <h1 className="hero-title">Parana Logística · <span>Clean Sea</span> · Terra Mare Services</h1>
-          <p className="hero-desc">Todos los módulos operativos del grupo en un solo lugar. Compras, víveres, proyectos, tripulaciones, seguridad y más.</p>
+          <p className="hero-desc">Hacemos las cosas una vez... y bien.</p>
           <div className="hero-stats">
             <div className="hero-stat"><div className="hero-stat-n">{MODULOS.length}</div><div className="hero-stat-l">Módulos</div></div>
             <div className="hero-stat"><div className="hero-stat-n">{activos.length}</div><div className="hero-stat-l">Activos</div></div>
@@ -394,7 +394,7 @@ export default function App() {
       </div>
 
       <footer className="portal-footer">
-        <div className="footer-left">Terra Mare Group · ERP Grupo Marítimo · Confidencial</div>
+        <div className="footer-left">Parana Logística · Clean Sea · Terra Mare Services · Confidencial</div>
         <div className="footer-right">v1.0 — {new Date().getFullYear()}</div>
       </footer>
     </>
