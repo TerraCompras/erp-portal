@@ -373,8 +373,8 @@ export default function App() {
         <div className="hero-content" style={{ textAlign: "center" }}>
           <div className="hero-eyebrow">Sistema integrado de gestión</div>
           <h1 className="hero-title">Parana Logística · <span>Clean Sea</span> · Terra Mare Services</h1>
-          <p className="hero-desc">Hacemos las cosas una vez... y bien.</p>
-          <div className="hero-stats">
+          <p className="hero-desc" style={{ textAlign: "center", margin: "0 auto" }}>Hacemos las cosas una vez... y bien.</p>
+          <div className="hero-stats" style={{ justifyContent: "center" }}>
             <div className="hero-stat"><div className="hero-stat-n">{MODULOS.length}</div><div className="hero-stat-l">Módulos</div></div>
             <div className="hero-stat"><div className="hero-stat-n">{activos.length}</div><div className="hero-stat-l">Activos</div></div>
             <div className="hero-stat"><div className="hero-stat-n">3</div><div className="hero-stat-l">Empresas</div></div>
