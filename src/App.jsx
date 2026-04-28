@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { supabase } from "./lib/supabase";
 
 const ERP_HOME_URL = "https://erp-home-nine.vercel.app";
 
@@ -122,18 +123,15 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); min-
   box-shadow: 0 2px 12px rgba(33,51,99,.2); position: sticky; top: 0; z-index: 10;
 }
 .header-brand { display: flex; align-items: center; gap: 12px; }
-.header-logo-img {
-  width: 36px; height: 36px; border-radius: 50%; object-fit: cover;
-  border: 2px solid rgba(255,255,255,.2);
-}
+.header-logo-img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,.2); }
 .header-main { font-size: 13px; font-weight: 700; color: #fff; letter-spacing: 1.5px; text-transform: uppercase; }
 .header-sub { font-size: 9px; color: rgba(255,255,255,.45); letter-spacing: .5px; font-family: var(--mono); margin-top: 1px; }
 .header-right { display: flex; align-items: center; gap: 12px; }
+.header-email { font-size: 10px; font-family: var(--mono); color: rgba(255,255,255,.4); }
 .back-btn {
   background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
   color: rgba(255,255,255,.7); font-family: var(--sans); font-size: 10px; font-weight: 600;
-  padding: 5px 12px; border-radius: 6px; cursor: pointer; transition: all .15s;
-  letter-spacing: .3px; display: flex; align-items: center; gap: 5px;
+  padding: 5px 12px; border-radius: 6px; cursor: pointer; transition: all .15s; letter-spacing: .3px;
 }
 .back-btn:hover { background: rgba(255,255,255,.2); color: #fff; }
 
@@ -168,10 +166,8 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); min-
 }
 .section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-.modulos-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 16px; margin-bottom: 36px;
-}
+.modulos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-bottom: 36px; }
+
 .modulo-card {
   background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
   padding: 22px; transition: all .2s; position: relative; overflow: hidden;
@@ -185,11 +181,15 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); min-
 .modulo-card.activo:hover { border-color: var(--card-color, var(--blue)); box-shadow: 0 4px 20px rgba(33,51,99,.12); transform: translateY(-2px); }
 .modulo-card.activo:hover::before { opacity: 1; }
 .modulo-card.proximamente { opacity: .75; }
+.modulo-card.sin-acceso { opacity: .45; cursor: not-allowed; }
+
 .card-top { display: flex; align-items: flex-start; justify-content: space-between; }
 .card-icono { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
 .card-badges { display: flex; gap: 6px; align-items: center; }
 .badge-activo { font-family: var(--mono); font-size: 8px; font-weight: 700; padding: 3px 8px; border-radius: 4px; background: #D1FAE5; color: #065F46; border: 1px solid #A7F3D0; letter-spacing: .5px; text-transform: uppercase; }
 .badge-prox { font-family: var(--mono); font-size: 8px; font-weight: 700; padding: 3px 8px; border-radius: 4px; background: #F3F4F6; color: #6B7280; border: 1px solid #E5E7EB; letter-spacing: .5px; text-transform: uppercase; }
+.badge-sin-acceso { font-family: var(--mono); font-size: 8px; font-weight: 700; padding: 3px 8px; border-radius: 4px; background: #FEE2E2; color: #991B1B; border: 1px solid #FECACA; letter-spacing: .5px; text-transform: uppercase; }
+
 .card-body { flex: 1; }
 .card-nombre { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 6px; line-height: 1.3; }
 .card-desc { font-size: 12px; color: var(--muted); line-height: 1.6; }
@@ -203,20 +203,33 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); min-
 .portal-footer { background: var(--navy); padding: 20px 40px; display: flex; align-items: center; justify-content: space-between; }
 .footer-left { font-size: 11px; color: rgba(255,255,255,.3); font-family: var(--mono); letter-spacing: .5px; }
 .footer-right { font-size: 10px; color: rgba(255,255,255,.2); font-family: var(--mono); }
+
+.loading { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--navy); }
+.loading-text { font-family: var(--mono); font-size: 11px; color: rgba(255,255,255,.4); letter-spacing: 2px; text-transform: uppercase; }
 `;
 
-function ModuloCard({ mod }) {
+function ModuloCard({ mod, tieneAcceso }) {
   const isActivo = mod.status === "activo";
-  const handleClick = () => { if (isActivo && mod.url) window.open(mod.url, "_blank"); };
+  const puedeAbrir = isActivo && mod.url && tieneAcceso;
+
+  const handleClick = () => { if (puedeAbrir) window.open(mod.url, "_blank"); };
+
+  let clase = `modulo-card ${mod.status}`;
+  if (isActivo && !tieneAcceso) clase = "modulo-card sin-acceso";
 
   return (
-    <div className={`modulo-card ${mod.status}`} style={{ "--card-color": mod.color }} onClick={handleClick}>
+    <div className={clase} style={{ "--card-color": mod.color }} onClick={handleClick}>
       <div className="card-top">
         <div className="card-icono" style={{ background: `${mod.color}18`, border: `1px solid ${mod.color}30` }}>
           {mod.icono}
         </div>
         <div className="card-badges">
-          {isActivo ? <span className="badge-activo">● Activo</span> : <span className="badge-prox">Próximamente</span>}
+          {isActivo && !tieneAcceso
+            ? <span className="badge-sin-acceso">Sin acceso</span>
+            : isActivo
+              ? <span className="badge-activo">● Activo</span>
+              : <span className="badge-prox">Próximamente</span>
+          }
         </div>
       </div>
       <div className="card-body">
@@ -225,9 +238,11 @@ function ModuloCard({ mod }) {
         <div className="card-tags">{mod.tags.map(t => <span key={t} className="card-tag">{t}</span>)}</div>
       </div>
       <div className="card-footer">
-        {isActivo
-          ? <span className="card-link" style={{ color: mod.color }}>Abrir módulo →</span>
-          : <span className="card-link-disabled">En desarrollo</span>
+        {isActivo && !tieneAcceso
+          ? <span className="card-link-disabled">Acceso no autorizado</span>
+          : puedeAbrir
+            ? <span className="card-link" style={{ color: mod.color }}>Abrir módulo →</span>
+            : <span className="card-link-disabled">En desarrollo</span>
         }
       </div>
     </div>
@@ -235,8 +250,51 @@ function ModuloCard({ mod }) {
 }
 
 export default function App() {
+  const [modulosPermitidos, setModulosPermitidos] = useState(null);
+  const [userEmail, setUserEmail] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        setUserEmail(session.user.email);
+        loadPermisos(session.user.id);
+      } else {
+        // Sin sesión — acceso completo (viene del erp-home ya autenticado)
+        setModulosPermitidos(null);
+        setLoading(false);
+      }
+    });
+  }, []);
+
+  const loadPermisos = async (userId) => {
+    try {
+      const { data } = await supabase.from("user_roles").select("modulos").eq("user_id", userId).single();
+      // Si modulos está vacío, acceso a todo
+      setModulosPermitidos(data?.modulos?.length > 0 ? data.modulos : null);
+    } catch {
+      setModulosPermitidos(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const tieneAcceso = (moduloId) => {
+    if (!modulosPermitidos) return true; // sin restricción = acceso total
+    return modulosPermitidos.includes(moduloId);
+  };
+
   const activos = MODULOS.filter(m => m.status === "activo");
   const proximos = MODULOS.filter(m => m.status === "proximamente");
+
+  if (loading) {
+    return (
+      <div className="loading">
+        <style>{CSS}</style>
+        <div className="loading-text">Cargando...</div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -244,12 +302,13 @@ export default function App() {
       <header className="header">
         <div className="header-brand">
           <img src="/Cs.png" alt="Parana Logística" className="header-logo-img" />
-          <div className="header-title">
+          <div>
             <div className="header-main">Parana Logística</div>
             <div className="header-sub">Portal de gestión</div>
           </div>
         </div>
         <div className="header-right">
+          {userEmail && <span className="header-email">{userEmail}</span>}
           <button className="back-btn" onClick={() => window.open(ERP_HOME_URL, "_self")}>
             ← Volver al ERP
           </button>
@@ -271,11 +330,11 @@ export default function App() {
       <div className="content">
         <div className="section-label">Módulos activos</div>
         <div className="modulos-grid">
-          {activos.map(mod => <ModuloCard key={mod.id} mod={mod} />)}
+          {activos.map(mod => <ModuloCard key={mod.id} mod={mod} tieneAcceso={tieneAcceso(mod.id)} />)}
         </div>
         <div className="section-label" style={{ marginTop: 8 }}>Próximamente</div>
         <div className="modulos-grid">
-          {proximos.map(mod => <ModuloCard key={mod.id} mod={mod} />)}
+          {proximos.map(mod => <ModuloCard key={mod.id} mod={mod} tieneAcceso={true} />)}
         </div>
       </div>
 
