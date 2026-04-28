@@ -243,7 +243,7 @@ export default function App() {
       <style>{CSS}</style>
       <header className="header">
         <div className="header-brand">
-          <img src="/PL.png" alt="Parana Logística" className="header-logo-img" />
+          <img src="/Cs.png" alt="Parana Logística" className="header-logo-img" />
           <div className="header-title">
             <div className="header-main">Parana Logística</div>
             <div className="header-sub">Portal de gestión</div>
