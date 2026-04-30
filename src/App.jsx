@@ -55,6 +55,16 @@ const MODULOS = [
     tags: ["Embarcaciones", "SSRR"],
   },
   {
+    id: "certificados",
+    nombre: "Certificados",
+    descripcion: "Seguimiento de certificados estatutarios y de equipos de la flota. Alertas de vencimientos.",
+    icono: "📜",
+    status: "activo",
+    url: "https://certificados-app-rho.vercel.app",
+    color: "#0E7490",
+    tags: ["Estatutarios", "Equipos", "Vencimientos"], 
+  },
+  {
     id: "pipeline",
     nombre: "Pipeline de Oportunidades",
     descripcion: "CRM comercial para seguimiento de licitaciones, propuestas y oportunidades de negocio.",
